@@ -242,3 +242,6 @@ class ShipmentOut(BaseModel):
 
 
 
+class shipmentmouvmentOut(BaseModel):
+    status: str
+    packaging_id:int 

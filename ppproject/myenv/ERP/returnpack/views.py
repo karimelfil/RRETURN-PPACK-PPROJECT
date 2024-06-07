@@ -1167,6 +1167,18 @@ def list_packagingmouvment_issue(request):
         ))
     return issue_list
 
+@api.get("/shipments/deliverd/",response=list[shipmentmouvmentOut])
+def list_deliverd_packages(request):
+    deliverd=Shipment.objects.filter(status='deliverd')
+    deliverd_pack=[]
+    for i in deliverd :
+        deliverd_pack.append(shipmentmouvmentOut(
+            status=i.status,
+            packaging_id=i.packaging.id,
+        ))
+    return deliverd_pack
+
+
 # this function is when the mouvment is issue(damaged,timedelay...) i put an fee issue in the class when the mouvment is issue we increase the total amount in the order class :
 @api.get("/order/issue")
 def handle_issue(request, packaging_mouvment_id: int):
@@ -1206,7 +1218,6 @@ def generate_sales_report(request):
     }
     return report_data
 
-
 @api.get("/stock/quantity")
 def handle_stock(request, stock_id: int, quantity: int):
     stock = get_object_or_404(Stock, id=stock_id)
@@ -1216,3 +1227,5 @@ def handle_stock(request, stock_id: int, quantity: int):
         return {"success": True, "message": "Stock updated successfully","id ":stock.id ,"remaining_quantity": stock.quantity}
     else:
         return {"success": False, "message": "Insufficient stock", "available_quantity": stock.quantity}
+
+
